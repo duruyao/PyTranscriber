@@ -4,14 +4,22 @@
 
 ## 1. Prerequisites
 
+### 1.1. OS Dependencies
+
 - [Python 3.X](https://www.python.org)
 - [FFmpeg](https://ffmpeg.org)
-- [pydub](https://pypi.org/project/pydub)
-- [SpeechRecognition](https://pypi.org/project/SpeechRecognition)
 
 Make sure you have [Python 3.X](https://www.python.org) installed, then run the command `python3 --version` to verify.
 
-Run the command `python3 setup.py install` to install other Python dependencies and OS dependencies.
+Make sure you have [FFmpeg](https://ffmpeg.org) installed, then run the command `ffmpeg -version` to verify.
+
+### 1.2. Python Dependencies
+
+- [tqdm](https://pypi.org/project/tqdm)
+- [pydub](https://pypi.org/project/pydub)
+- [SpeechRecognition](https://pypi.org/project/SpeechRecognition)
+
+Run the command `pip3 install -r requirements.txt` to install the required Python packages.
 
 ## 2. Usage
 
@@ -28,7 +36,7 @@ positional arguments:
 optional arguments:
   -h, --help            show this help message and exit
   -o OUTPUT, --output OUTPUT
-                        output text filename
+                        output text filename (default: INPUT.out.txt)
   --language {en-GB,en-US,zh-CN,zh-TW}
-                        target language
+                        target language (default: en-US)
 ```
