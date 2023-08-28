@@ -1,34 +1,50 @@
 #!/usr/bin/env python3
 
-import speech_recognition as sr
+import argparse
+from typing import Tuple
+
 from pydub import AudioSegment
+import speech_recognition as sr
 
 
-def transcribe_audio(input_audio_path, output_text_path, target_language):
+def parse_args() -> Tuple[str, str, str]:
+    parser = argparse.ArgumentParser()
+    parser.add_argument('input', type=str, help='input media filename')
+    parser.add_argument('-o', '--output', required=False, type=str, help='output text filename')
+    parser.add_argument('--language', required=False, type=str, default='en-US', help='target language',
+                        choices=['en-GB', 'en-US',
+                                 'zh-CN', 'zh-TW'])
+    args = parser.parse_args()
+    input_filename = args.input
+    output_filename = args.output if args.output else f'{input_filename}.out.txt'
+    target_language = args.language
+    return input_filename, output_filename, target_language
+
+
+def transcribe_audio(input_filename: str, output_filename: str, target_language: str):
+    temp_filename = f'{input_filename}.temp.wav'
+    try:
+        audio = AudioSegment.from_file(input_filename)
+        audio.export(temp_filename, format='wav')
+    except Exception as e:
+        print(f'Error: {e}')
+        return
+
     recognizer = sr.Recognizer()
-
-    # convert audio files from .m4a to .wav format
-    audio = AudioSegment.from_file(input_audio_path, format='m4a')
-    audio.export('temp.wav', format='wav')
-
-    with sr.AudioFile('temp.wav') as source:
+    with sr.AudioFile(temp_filename) as source:
         audio_data = recognizer.record(source)
     try:
-        if target_language == 'en':
-            text = recognizer.recognize_google(audio_data, language='en-US')
-        elif target_language == 'zh':
-            text = recognizer.recognize_google(audio_data, language='zh-CN')
-        else:
-            print(f'Error: Unsupported language type \'{target_language}\'')
-            return
-        with open(output_text_path, 'w', encoding='utf-8') as output_file:
+        text = recognizer.recognize_google(audio_data, language=target_language)
+        with open(output_filename, 'w', encoding='utf-8') as output_file:
             output_file.write(text)
-        print('Transcription Done!')
+        print(f'Transcription Done! See {output_filename}')
     except sr.UnknownValueError:
-        print('Error: Cannot recognize language in audio')
+        print(f'Error: Cannot recognize language in {input_filename}')
+        return
     except sr.RequestError as e:
         print(f'Error: {e}, check your net connection or proxy server setting')
+        return
 
 
 if __name__ == '__main__':
-    transcribe_audio('input_audio.m4a', 'output_text.txt', 'zh')
+    transcribe_audio(*parse_args())
