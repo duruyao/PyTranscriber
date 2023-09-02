@@ -28,7 +28,7 @@ Just run the command `python3 main.py <INPUT_FILENAME>` to transcribe your media
 Run the command `python3 main.py --help` to show help manual.
 
 ```text
-usage: main.py [-h] [-o OUTPUT] [--language {en-GB,en-US,zh-CN,zh-TW}] input
+usage: main.py [-h] [-o OUTPUT] [-l {en-GB,en-US,zh-CN,zh-TW}] input
 
 positional arguments:
   input                 input media filename
@@ -37,6 +37,6 @@ optional arguments:
   -h, --help            show this help message and exit
   -o OUTPUT, --output OUTPUT
                         output text filename (default: INPUT.out.txt)
-  --language {en-GB,en-US,zh-CN,zh-TW}
+  -l {en-GB,en-US,zh-CN,zh-TW}, --language {en-GB,en-US,zh-CN,zh-TW}
                         target language (default: en-US)
 ```
